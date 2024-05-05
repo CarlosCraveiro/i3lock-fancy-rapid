@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
         write(fds[1], postblur, height * width * 3);
         int status;
         wait(&status);
+        free(postblur);
         exit(WEXITSTATUS(status));
     } else {
         dup2(fds[0], STDIN_FILENO);
