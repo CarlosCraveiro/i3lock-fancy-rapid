@@ -86,17 +86,23 @@ static inline void transpose(unsigned char *dest, unsigned char *src, int height
     }
 }
 
+static inline void swap(unsigned char **dest, unsigned char **src) {
+    unsigned char *aux = *src;
+    *src = *dest;
+    *dest = aux;
+}
+
 void box_blur(unsigned char *dest, unsigned char *src, int height, int width,
               int radius, int times)
 {
     for (int i = 0; i < times; ++i) {
         box_blur_h(dest, src, height, width, radius);
-        memcpy(src, dest, height * width * 3);
+        swap(&src, &dest);
     }
     transpose(src, dest, height, width);
     for (int i = 0; i < times; ++i) {
         box_blur_h(dest, src, width, height, radius);
-        memcpy(src, dest, height * width * 3);
+        swap(&src, &dest);
     }
     transpose(dest, src, width, height);
 }
